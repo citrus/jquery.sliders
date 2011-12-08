@@ -6,7 +6,7 @@
 
 ;(function($) {
 
-  var version = '0.2.8';
+  var version = '0.3.0';
       
   $.fn.sliders = function() {
     var args = arguments;
@@ -24,16 +24,15 @@
       var slider      = this.slider || getSlider();
       var slides      = getSlides();
       var lastIndex   = this.lastIndex || 0;
-      var index       = this.index || 0;
+      var index       = slider.data('index') || 0;
       var options     = this.options = $.extend(false, this.options || $.fn.sliders.defaults, (args[0] && args[0].constructor == Object ? args[0] : {}));
       var delay       = this.delay || null;
       var keyEnabled  = this.keyEnabled || false;
       var locked      = $(slider).data('locked') || false;
       var animating   = $(slider).data('animating') || false;
-      var transitions = setupTransitions();      
+      var transitions = setupTransitions();
       
-      
-      // Setup      
+      // Setup
       if (!this.hasInit) {
   
         align();
@@ -60,7 +59,6 @@
       this.slider     = slider;
       this.options    = options;
       this.lastIndex  = lastIndex;
-      this.index      = index;
       this.delay      = delay;
       this.keyEnabled = keyEnabled;
       this.locked     = locked;
@@ -68,8 +66,7 @@
       return this;
       
       
-          
-          
+      
           
       // =================================  
       // Setup slides and slider
@@ -88,6 +85,10 @@
       
       function getSlides() {
         return slider ? slider.children().get() : container.children().get();
+      }
+      
+      function getStatus() {
+        return delay ? 'playing' : 'paused';
       }
       
       function align() {
@@ -110,7 +111,9 @@
         return $(slides);        
       }
       
-      
+      function trigger(evt) {
+        $(slider).trigger(evt, [ index, getStatus() ]);
+      }
       
       // =================================  
       // Controls 
@@ -121,25 +124,26 @@
     		    play();
     		    break;
           case 'stop':
-            stop();
+          case 'pause':
+            pause();
             break;
           case 'toggle':
             toggle();
             break;
           case 'prev':
           case 'previous':
-            stop();
+            pause();
             prev();
             break;
           case 'next':
-            stop();
+            pause();
             next();
             break;
           case 'goto':
           case 'go to':
-            stop();            
+            pause();            
             var idx = 0;
-            if (option != null && option.constructor == String) {
+            if (option != null && option.constructor === String) {
               switch(option) {
                 case 'next':
                   idx = advance(1);
@@ -162,7 +166,7 @@
             go_to(idx);
             break;
           case 'advance':
-            stop();
+            pause();
             advance(option || 1);
             transition();
             break;
@@ -182,7 +186,7 @@
             if (options.keyboardEvents) enableKeyboard();
             break;
           case 'hide':
-            stop();
+            pause();
             disableKeyboard();
             if (option === false) container.css('display', 'none');
             else container.fadeOut();
@@ -191,25 +195,19 @@
       };
       
       
-      
-      // Slideshow 
-      
       function play() {
         if (delay) return;
-        delay = setInterval(next, options.delay);
+        delay  = setInterval(next, options.delay);
+        trigger('play');
       };
-      function stop() {
+      function pause() {
         if (delay) delay = clearTimeout(delay);
+        trigger('pause');
       };
       function toggle() {
-        if (delay) stop();
+        if (delay) pause();
         else play();
       };
-      
-      
-      
-      // Manual
-      
       function next() {
         if (locked || slides.length < $.fn.sliders.minimum.slides) return;
         lastIndex = index;
@@ -272,11 +270,11 @@
         }
         
         transitions.update(true);
-        $(slider).trigger('change', index);
+        trigger('change');
         if (!options.allowCue) transitions.lock(true);
         
       };
-      
+            
       function setupTransitions() {
         return {      
           none: function() {
@@ -336,7 +334,9 @@
         if (locked) return index;
         var l = slides.length; 
         var i = count < l ? count : l - (count % l);
-        return index = withinLimits(index + i);
+        index = withinLimits(index + i);
+        slider.data('index', index);
+        return index;
       };
       function withinLimits(n) {
         var l = slides.length;
@@ -418,8 +418,8 @@
   $.fn.sliders.defaults = {
     transition:     'slide',
     allowCue:       false,
-    delay:          4000, 
-    speed:          250,
+    delay:          5000, 
+    speed:          450,
     first:          0,
     ease:           'swing',
     play:           true,
