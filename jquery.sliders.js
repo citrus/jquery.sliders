@@ -6,7 +6,7 @@
 
 ;(function($) {
 
-  var version = '0.3.0';
+  var version = '0.3.1';
       
   $.fn.sliders = function() {
     var args = arguments;
@@ -221,9 +221,10 @@
         transition();
       };
       function go_to(n) {
-        if (slides.length < $.fn.sliders.minimum.slides || index == n) return;
+        if (slides.length < $.fn.sliders.minimum.slides) return;
         lastIndex = index;
         index = withinLimits(n);
+        slider.data('index', index);
         transition();
       };
             
