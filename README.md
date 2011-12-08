@@ -1,7 +1,9 @@
 jquery.sliders.js
 =================
 
-A jquery slideshow/carousel plugin... 
+A jquery slideshow/carousel plugin... Check out the demo here: [http://citrus.github.com/jquery.sliders](http://citrus.github.com/jquery.sliders)
+
+Enjoy!
 
 
 Usage
