@@ -6,7 +6,7 @@
 
 ;(function($) {
 
-  var version = '0.3.1';
+  var version = '0.3.2';
       
   $.fn.sliders = function() {
     var args = arguments;
@@ -41,7 +41,7 @@
         if (options.delay < $.fn.sliders.minimum.delay) options.delay = $.fn.sliders.errors.delay(options.delay);
         if (options.speed < $.fn.sliders.minimum.speed) options.speed = $.fn.sliders.errors.speed(options.speed);
         
-        advance(Number(options.first));
+        setIndex(Number(options.first));
         
         if (!args[0] || args[0].constructor != String) {
           if (options.play) play();
@@ -141,7 +141,7 @@
             break;
           case 'goto':
           case 'go to':
-            pause();            
+            pause(); 
             var idx = 0;
             if (option != null && option.constructor === String) {
               switch(option) {
@@ -167,7 +167,7 @@
             break;
           case 'advance':
             pause();
-            advance(option || 1);
+            setIndex(advance(option || 1));
             transition();
             break;
           case 'enableKeyboard':
@@ -210,21 +210,17 @@
       };
       function next() {
         if (locked || slides.length < $.fn.sliders.minimum.slides) return;
-        lastIndex = index;
-        advance(1);
+        setIndex(advance(1));
         transition();
       };      
       function prev() {
         if (locked || slides.length < $.fn.sliders.minimum.slides) return;
-        lastIndex = index;
-        advance(-1);
+        setIndex(advance(-1));
         transition();
       };
       function go_to(n) {
         if (slides.length < $.fn.sliders.minimum.slides) return;
-        lastIndex = index;
-        index = withinLimits(n);
-        slider.data('index', index);
+        setIndex(n);
         transition();
       };
             
@@ -294,7 +290,9 @@
             last.css({ zIndex: slides.length - 1 });
             next.css({ opacity: 0, zIndex: slides.length })
             
-            last.animate({ opacity: 0 }, options.speed, options.ease);
+            last.animate({ opacity: 0 }, options.speed, options.ease, function() {
+              last.css({ zIndex: 0, opacity: 0 });
+            });
             next.animate({ opacity: 1 }, options.speed, options.ease);
           },
           cancel: function() {
@@ -331,13 +329,20 @@
       // =================================  
       // Random Logic 
     
+      function setIndex(idx) {
+        lastIndex = index;
+        index = withinLimits(idx);
+        slider.data('index', index);
+        return index;
+      };    
       function advance(count) {
         if (locked) return index;
         var l = slides.length; 
         var i = count < l ? count : l - (count % l);
-        index = withinLimits(index + i);
-        slider.data('index', index);
-        return index;
+        var idx = withinLimits(index + i);
+        //index = withinLimits(index + i);
+        //slider.data('index', index);
+        return idx;
       };
       function withinLimits(n) {
         var l = slides.length;
