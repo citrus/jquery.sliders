@@ -30,6 +30,7 @@
       #slideshow {
         width: 680px;
         height: 385px;
+        margin-top: 20px;
         border: 1px solid #ccc;
       }
       #slideshow img {
@@ -55,10 +56,13 @@
       }
       .slideshow-controls a:hover {
         background-color: #efefef;
+        border-color: #bbb;
         color: #111;
       }
       .slideshow-controls a.selected {
         color: #000;
+        background-color: #fff;
+        border-color: #bbb;
       }
     </style>
     
@@ -119,6 +123,10 @@
     
       <h1>jquery.sliders.js</h1>
       
+      <h3>jquery.sliders is a simple jquery carousel plugin.</h3>
+      
+      <p>Find the source code on github: <a href="https://github.com/citrus/jquery.sliders.js">https://github.com/citrus/jquery.sliders.js</a></p>
+            
       <div id='slideshow'>
         <img alt="Photo 1" src="photos/melissa_giraldo_1.jpg" />
         <img alt="Photo 2" src="photos/melissa_giraldo_2.jpg" />
@@ -128,13 +136,13 @@
       </div>
       
       <div class='slideshow-controls'>
-        <a href="#previous" id="slideshow-previous" name="slideshow-previous">&laquo;</a>
+        <a href="#previous" id="slideshow-previous" name="slideshow-previous">&larr;</a>
         <a href="#1" class="slideshow-slide">1</a>
         <a href="#2" class="slideshow-slide">2</a>
         <a href="#3" class="slideshow-slide">3</a>
         <a href="#4" class="slideshow-slide">4</a>
         <a href="#5" class="slideshow-slide">5</a>
-        <a href="#next" id="slideshow-next" name="slideshow-next">&raquo;</a>
+        <a href="#next" id="slideshow-next" name="slideshow-next">&rarr;</a>
         <a href="#play-pause" class="pause" id="play-pause">pause</a>
         <span id="status">status: <i>playing, slide: 1</i></span>
       </div>
