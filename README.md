@@ -20,7 +20,7 @@ Or with options:
 ```js
 $('#slideshow').sliders({  
   transition:     'slide', // slide or fade
-  allowCue:       false,   // allow multiple transitions to be queued
+  queue:          false,   // allow multiple transitions to be queued
   delay:          5000,    // time each slide is shown (milliseconds)
   speed:          450,     // time of transition (milliseconds)
   first:          0,       // initial slide to start on

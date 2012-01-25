@@ -6,7 +6,7 @@
 
 ;(function($) {
 
-  var version = '0.3.2';
+  var version = '0.3.3';
       
   $.fn.sliders = function() {
     var args = arguments;
@@ -268,7 +268,7 @@
         
         transitions.update(true);
         trigger('change');
-        if (!options.allowCue) transitions.lock(true);
+        if (!options.queue) transitions.lock(true);
         
       };
             
@@ -423,7 +423,7 @@
         
   $.fn.sliders.defaults = {
     transition:     'slide',
-    allowCue:       false,
+    queue:          false,
     delay:          5000, 
     speed:          450,
     first:          0,
