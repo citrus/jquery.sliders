@@ -149,6 +149,7 @@
                   idx = advance(1);
                   break;
                 case 'prev':
+                case 'previous':
                   idx = advance(-1);
                   break;
                 case 'last':
@@ -219,7 +220,7 @@
         transition();
       };
       function go_to(n) {
-        if (slides.length < $.fn.sliders.minimum.slides) return;
+        if (locked || slides.length < $.fn.sliders.minimum.slides) return;
         setIndex(n);
         transition();
       };
