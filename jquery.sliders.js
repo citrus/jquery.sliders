@@ -6,7 +6,7 @@
 
 ;(function($) {
 
-  var version = '0.3.3';
+  var version = '0.3.4';
       
   $.fn.sliders = function() {
     var args = arguments;
