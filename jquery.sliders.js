@@ -6,7 +6,7 @@
 
 ;(function($) {
 
-  var version = '0.3.4';
+  var version = '0.4.0';
       
   $.fn.sliders = function() {
     var args = arguments;
@@ -21,11 +21,11 @@
       var slider, index;
       var $id         = this.$id || $.fn.sliders.generateId();
       var container   = $(this);
+      var options     = this.options = $.extend(false, this.options || $.fn.sliders.defaults, (args[0] && args[0].constructor == Object ? args[0] : {}));
       var slider      = this.slider || getSlider();
       var slides      = getSlides();
       var lastIndex   = this.lastIndex || 0;
       var index       = slider.data('index') || 0;
-      var options     = this.options = $.extend(false, this.options || $.fn.sliders.defaults, (args[0] && args[0].constructor == Object ? args[0] : {}));
       var delay       = this.delay || null;
       var keyEnabled  = this.keyEnabled || false;
       var locked      = $(slider).data('locked') || false;
@@ -94,12 +94,13 @@
       function align() {
         var w = container.width();    
         var h = container.height();
-        $(slides).css({ display: 'block', position: 'absolute', left: 0, top: 0, width: w });
+        var sw = w / options.slidesPerPage;
+        $(slides).css({ display: 'block', position: 'absolute', left: 0, top: 0, width: sw });
         switch(options.transition) {
           case 'slide':
-            slider.css({ width: w * slides.length, height: h, left: -w * index });           
+            slider.css({ width: sw * slides.length, height: h, left: -sw * index });           
             $(slides).each(function(i,el) {
-              $(el).css({ opacity: 1, left: w * i, zIndex: slides.length - i });
+              $(el).css({ opacity: 1, left: sw * i, zIndex: slides.length - i });
             });
             break;
           //case 'fade':
@@ -282,7 +283,7 @@
             next.css({ opacity: 1, zIndex: slides.length, display: 'block' });
           },
           slide: function() {
-            slider.animate({ left: -container.width() * index }, options.speed, options.ease);
+            slider.animate({ left: -container.width() / options.slidesPerPage * index }, options.speed, options.ease);
           },
           fade: function() {
             var last = $(slides[lastIndex]);
@@ -338,17 +339,20 @@
       };    
       function advance(count) {
         if (locked) return index;
-        var l = slides.length; 
+        var l = slides.length / options.slidesPerPage; 
         var i = count < l ? count : l - (count % l);
         var idx = withinLimits(index + i);
-        //index = withinLimits(index + i);
-        //slider.data('index', index);
         return idx;
       };
       function withinLimits(n) {
         var l = slides.length;
         var i = n < l ? n : l - (n % l);
-        return i < 0 ? l + i : l <= i ? i - l : i;
+        i = i < 0 ? l + i : l <= i ? i - l : i;
+        if (options.slidesPerPage > 1 && options.transition == 'slide') {
+          var p = Math.round(l / options.slidesPerPage);
+          i = index == i ? 0 :i > p ? p : i;
+        }        
+        return i;
       };
       
       
@@ -430,6 +434,7 @@
     first:          0,
     ease:           'swing',
     play:           true,
+    slidesPerPage:  1,
     keyboardEvents: true
   };
   
