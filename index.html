@@ -27,6 +27,8 @@
       h1 {
         margin: 0 0 15px 0;
       }
+      
+      
       #slideshow {
         width: 680px;
         height: 385px;
@@ -64,6 +66,21 @@
         background-color: #fff;
         border-color: #bbb;
       }
+      
+      /******************************************************************************************/
+      
+      #slideshow-carousel {
+        width: 680px;
+        height: 128px;
+        margin-top: 20px;
+        border: 1px solid #ccc;
+      }
+      
+      #slideshow-carousel img {
+        display: block;
+        width: 33%;
+        height: 128px;
+      }
     </style>
     
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -71,8 +88,8 @@
     <script type="text/javascript">
     
       $(document).ready(function(evt) {
-        
-        $('#slideshow').sliders({ delay: 2500, speed: 500 });
+
+        $('#slideshow').sliders({ delay: 2500, speed: 500, keyboardEvents: false });
         $('a.slideshow-slide:first').addClass('selected')
         
         function update(index, status) {
@@ -113,6 +130,12 @@
           update(index, status);
         });
         
+        
+        /******************************************************************************************/
+        
+        $('#slideshow-carousel').sliders({ delay: 2500, speed: 500, slidesPerPage: 3 });
+        
+        
       });
 
     </script>
@@ -146,6 +169,16 @@
         <a href="#play-pause" class="pause" id="play-pause">pause</a>
         <span id="status">status: <i>playing, slide: 1</i></span>
       </div>
+      
+      <hr/>
+      
+      <div id='slideshow-carousel'>
+        <img alt="Photo 1" src="photos/melissa_giraldo_1.jpg" />
+        <img alt="Photo 2" src="photos/melissa_giraldo_2.jpg" />
+        <img alt="Photo 3" src="photos/melissa_giraldo_3.jpg" />
+        <img alt="Photo 4" src="photos/melissa_giraldo_4.jpg" />
+        <img alt="Photo 5" src="photos/melissa_giraldo_5.jpg" />
+      </div>                                                              
       
     </div>    
   </body>
