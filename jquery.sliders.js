@@ -349,8 +349,8 @@
         var i = n < l ? n : l - (n % l);
         i = i < 0 ? l + i : l <= i ? i - l : i;
         if (options.slidesPerPage > 1 && options.transition == 'slide') {
-          var p = Math.round(l / options.slidesPerPage);
-          i = index == i ? 0 :i > p ? p : i;
+          var p = l - options.slidesPerPage;
+          i = index == i ? 0 : i > p ? p : i;
         }        
         return i;
       };
